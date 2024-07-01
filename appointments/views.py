@@ -59,12 +59,14 @@ def list_appointments(request):
 
 @csrf_exempt
 def update_appointment(request, appointment_id):
-    if request.method == 'POST':
-        appointment_date = parse_datetime(request.POST.get('appointment_date'))
-        symptoms = request.POST.get('symptoms')
-        prescription = request.POST.get('prescription')
-
+    if request.method == 'PUT':
         try:
+            data = json.loads(request.body)
+            appointment_date_str = data.get('appointment_date')
+            appointment_date = parse_datetime(appointment_date_str) if appointment_date_str else None
+            symptoms = data.get('symptoms')
+            prescription = data.get('prescription')
+
             appointment = Appointment.objects.get(id=appointment_id)
             if appointment_date:
                 appointment.appointment_date = appointment_date
