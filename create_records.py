@@ -3,7 +3,7 @@ import django
 from django.contrib.auth.models import User
 from appointments.models import Doctor, Patient
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'railway_django_stack.settings')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'railway_django_stack.settings'
 django.setup()
 
 # Create a user for the doctor
