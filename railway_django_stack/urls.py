@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 import railway_django_stack.example_views as example_views
 
@@ -24,4 +24,5 @@ urlpatterns = [
     path("healthcheck/", example_views.health_check, name="health_check"),
     path("test-task/", example_views.test_task, name="test_task"),
     path("admin/", admin.site.urls),
+    path("appointments/", include("appointments.urls")),
 ]

@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_celery_beat",
     "django_celery_results",
-    # Your custom apps would come here
+    "railway_django_stack",  # Add the custom app here
+    "appointments",  # Add the new appointments app here
 ]
 
 MIDDLEWARE = [
@@ -78,11 +79,11 @@ WSGI_APPLICATION = "railway_django_stack.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": config("PGHOST", default="db"),
-        "USER": config("PGUSER", default="postgres"),
-        "NAME": config("PGDATABASE", default="postgres"),
-        "PASSWORD": config("PGPASSWORD", default="postgres"),
-        "PORT": config("PGPORT", default=5432),
+        "HOST": "roundhouse.proxy.rlwy.net",
+        "USER": "postgres",
+        "NAME": "railway",
+        "PASSWORD": "biFnCiGBxBduyHxKGNMXkCxBOdkPJmGh",
+        "PORT": 31991,
         "CONN_MAX_AGE": 60,
     }
 }
@@ -147,3 +148,26 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Logging configuration
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
