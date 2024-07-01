@@ -3,16 +3,23 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.dateparse import parse_datetime
 from .models import Doctor, Patient, Appointment
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def create_appointment(request):
+    logger.info(f"Received request at {request.path}")
     if request.method == 'POST':
-        doctor_id = request.POST.get('doctor_id')
-        patient_id = request.POST.get('patient_id')
-        appointment_date = parse_datetime(request.POST.get('appointment_date'))
-        symptoms = request.POST.get('symptoms')
-
         try:
+            data = json.loads(request.body)
+            logger.info(f"Request data: {data}")
+            doctor_id = data.get('doctor_id')
+            patient_id = data.get('patient_id')
+            appointment_date = parse_datetime(data.get('appointment_date'))
+            symptoms = data.get('symptoms')
+
             doctor = Doctor.objects.get(id=doctor_id)
             patient = Patient.objects.get(id=patient_id)
             appointment = Appointment.objects.create(
@@ -21,12 +28,16 @@ def create_appointment(request):
                 appointment_date=appointment_date,
                 symptoms=symptoms
             )
+            logger.info(f"Appointment created with ID: {appointment.id}")
             return JsonResponse({'status': 'success', 'appointment_id': appointment.id})
         except Doctor.DoesNotExist:
+            logger.error("Doctor not found")
             return JsonResponse({'status': 'error', 'message': 'Doctor not found'}, status=404)
         except Patient.DoesNotExist:
+            logger.error("Patient not found")
             return JsonResponse({'status': 'error', 'message': 'Patient not found'}, status=404)
         except Exception as e:
+            logger.error(f"Exception: {str(e)}")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 @csrf_exempt
@@ -79,5 +90,3 @@ def delete_appointment(request, appointment_id):
             return JsonResponse({'status': 'error', 'message': 'Appointment not found'}, status=404)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
-# Create your views here.
