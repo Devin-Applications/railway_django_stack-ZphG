@@ -85,3 +85,71 @@ This is a barebones Django-project with the following additions/updates:
 - Uses [`python-decouple`](https://github.com/HBNetwork/python-decouple) to manage settings via environment varialbes
 - Uses [`whitenoise`](https://github.com/evansd/whitenoise) to make serving static assets easy
 - Installs and runs with [`gunicorn`](https://github.com/benoitc/gunicorn)
+
+## API Endpoints
+
+### Create Appointment
+
+```sh
+curl -X POST https://django-production-766c.up.railway.app/appointments/create/ \
+     -H "Content-Type: application/json" \
+     -d '{"doctor_id": 1, "patient_id": 1, "appointment_date": "2024-07-01T10:00:00Z", "symptoms": "Cough and fever"}'
+```
+
+### List Appointments
+
+```sh
+curl -X GET https://django-production-766c.up.railway.app/appointments/list/
+```
+
+### Update Appointment
+
+```sh
+curl -X PUT https://django-production-766c.up.railway.app/appointments/update/4/ \
+     -H "Content-Type: application/json" \
+     -d '{"appointment_date": "2024-07-02T10:00:00Z", "symptoms": "Updated symptoms"}'
+```
+
+### Delete Appointment
+
+```sh
+curl -X DELETE https://django-production-766c.up.railway.app/appointments/delete/4/
+```
+
+## Expected Responses
+
+### Create Appointment
+
+```json
+{
+  "status": "success",
+  "appointment_id": 4
+}
+```
+
+### List Appointments
+
+```json
+{
+  "status": "success",
+  "appointments": []
+}
+```
+
+### Update Appointment
+
+```json
+{
+  "status": "success",
+  "message": "Appointment updated successfully"
+}
+```
+
+### Delete Appointment
+
+```json
+{
+  "status": "success",
+  "message": "Appointment deleted successfully"
+}
+```
