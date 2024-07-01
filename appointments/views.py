@@ -18,6 +18,7 @@ def create_appointment(request):
             doctor_id = data.get('doctor_id')
             patient_id = data.get('patient_id')
             appointment_date_str = data.get('appointment_date')
+            logger.info(f"Type of appointment_date_str: {type(appointment_date_str)}")
             appointment_date = parse_datetime(appointment_date_str) if appointment_date_str else None
             symptoms = data.get('symptoms')
 
