@@ -29,4 +29,55 @@ def create_appointment(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
+@csrf_exempt
+def list_appointments(request):
+    if request.method == 'GET':
+        appointments = Appointment.objects.all()
+        appointments_list = [
+            {
+                'id': appointment.id,
+                'doctor': appointment.doctor.user.username,
+                'patient': appointment.patient.user.username,
+                'appointment_date': appointment.appointment_date,
+                'symptoms': appointment.symptoms,
+                'prescription': appointment.prescription
+            }
+            for appointment in appointments
+        ]
+        return JsonResponse({'status': 'success', 'appointments': appointments_list})
+
+@csrf_exempt
+def update_appointment(request, appointment_id):
+    if request.method == 'POST':
+        appointment_date = parse_datetime(request.POST.get('appointment_date'))
+        symptoms = request.POST.get('symptoms')
+        prescription = request.POST.get('prescription')
+
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+            if appointment_date:
+                appointment.appointment_date = appointment_date
+            if symptoms:
+                appointment.symptoms = symptoms
+            if prescription:
+                appointment.prescription = prescription
+            appointment.save()
+            return JsonResponse({'status': 'success', 'message': 'Appointment updated successfully'})
+        except Appointment.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Appointment not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+@csrf_exempt
+def delete_appointment(request, appointment_id):
+    if request.method == 'DELETE':
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+            appointment.delete()
+            return JsonResponse({'status': 'success', 'message': 'Appointment deleted successfully'})
+        except Appointment.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Appointment not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
 # Create your views here.
