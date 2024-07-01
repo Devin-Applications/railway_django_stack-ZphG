@@ -7,9 +7,9 @@ services:
       args:
         PYTHON_BUILD_VERSION: "3.11"
     environment: &app-environment
-      DEBUG: "False"
+      DEBUG: "True"
       RUN_MIGRATIONS: "True"
-      DJANGO_SECRET_KEY: "l$0cd-!v9qc382qvufq-omh_lq0upson)u+02f64fj1=m)@o4b"
+      DJANGO_SECRET_KEY: "l$$0cd-!v9qc382qvufq-omh_lq0upson)u+02f64fj1=m)@o4b"
       # Postgres params
       POSTGRES_HOST: "roundhouse.proxy.rlwy.net"
       POSTGRES_PORT: "31991"
