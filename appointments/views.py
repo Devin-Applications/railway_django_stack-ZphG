@@ -15,9 +15,10 @@ def create_appointment(request):
         try:
             data = json.loads(request.body)
             logger.info(f"Request data: {data}")
-            doctor_id = data.get('doctor')
-            patient_id = data.get('patient')
-            appointment_date = parse_datetime(data.get('scheduled_time'))
+            doctor_id = data.get('doctor_id')
+            patient_id = data.get('patient_id')
+            appointment_date_str = data.get('appointment_date')
+            appointment_date = parse_datetime(appointment_date_str) if appointment_date_str else None
             symptoms = data.get('symptoms')
 
             doctor = Doctor.objects.get(id=doctor_id)
